@@ -3789,29 +3789,30 @@
             });
             document.querySelector(`[data-filter="${filterType}"]`).classList.add('active');
 
+            // 先获取基础单词列表（按年级过滤）
+            let baseWords;
+            if (currentVocabGrade === '') {
+                baseWords = [...vocabularyWords];
+            } else {
+                baseWords = vocabularyWords.filter(word => word.grade == currentVocabGrade);
+            }
+
             // 筛选单词
             switch (filterType) {
                 case 'all':
-                    // 显示所有单词（按年级过滤）
-                    if (currentVocabGrade === '') {
-                        filteredWords = [...vocabularyWords];
-                    } else {
-                        filteredWords = vocabularyWords.filter(word => word.grade == currentVocabGrade);
-                    }
+                    // 显示所有单词
+                    filteredWords = baseWords;
                     break;
                 case 'learned':
                     // 只显示已学单词
-                    const baseWords = currentVocabGrade === '' ? vocabularyWords : vocabularyWords.filter(word => word.grade == currentVocabGrade);
                     filteredWords = baseWords.filter(word => learnedWords.some(learned => learned.word === word.word));
                     break;
                 case 'learning':
-                    // 显示学习中的单词（这里可以根据具体需求定义）
-                    const baseWords2 = currentVocabGrade === '' ? vocabularyWords : vocabularyWords.filter(word => word.grade == currentVocabGrade);
-                    // 假设学习中是指在learnedWords中但需要巩固的单词，这里简单处理
-                    filteredWords = baseWords2.filter(word => !learnedWords.some(learned => learned.word === word.word));
+                    // 显示未学习的单词（学习中）
+                    filteredWords = baseWords.filter(word => !learnedWords.some(learned => learned.word === word.word));
                     break;
                 default:
-                    filteredWords = [...vocabularyWords];
+                    filteredWords = baseWords;
             }
 
             currentVocabPage = 1;
