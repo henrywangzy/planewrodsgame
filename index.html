@@ -3613,6 +3613,10 @@
         
         function showVocabulary() {
             console.log('📚 显示单词本界面');
+            // 如果游戏正在进行，暂停游戏
+            if (gameRunning && !gamePaused) {
+                pauseGame();
+            }
             initializeVocabularyWords();
             switchScreen('vocabularyScreen');
             displayWords();
@@ -4229,7 +4233,11 @@
             document.querySelectorAll('.screen').forEach(screen => {
                 screen.classList.remove('active');
             });
-            
+
+            // 清除所有游戏弹窗（单词学习弹窗、例句弹窗等）
+            const existingDialogs = document.querySelectorAll('.unified-word-dialog, .example-dialog');
+            existingDialogs.forEach(dialog => dialog.remove());
+
             // 显示目标界面
             const targetScreen = document.getElementById(targetScreenId);
             if (targetScreen) {
