@@ -1,0 +1,25 @@
+{
+  "name": "planewordsgame",
+  "version": "1.0.0",
+  "description": "> 一款结合飞机射击与英语单词学习的移动端H5教育游戏",
+  "main": "test-game.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:pause-position": "node test-pause-right-position.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/henrywangzy/planewordsgame.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/henrywangzy/planewordsgame/issues"
+  },
+  "homepage": "https://github.com/henrywangzy/planewordsgame#readme",
+  "dependencies": {
+    "playwright": "^1.55.0"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git remote set-url:*)",
+      "Bash(python:*)",
+      "Bash(npx playwright:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页模块 - 游戏入口界面</title>
+    <link rel="stylesheet" href="../CoreStyles/variables.css">
+    <link rel="stylesheet" href="../CoreStyles/styles.css">
+    <link rel="stylesheet" href="../CoreStyles/animations.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="phone-container">
+        <div class="screen active">
+            <!-- 背景装饰 -->
+            <div class="stars-background">
+                <div class="star"></div>
+                <div class="star"></div>
+                <div class="star"></div>
+                <div class="star"></div>
+                <div class="star"></div>
+            </div>
+            
+            <!-- 浮动单词 -->
+            <div class="floating-words">
+                <div class="floating-word">World</div>
+                <div class="floating-word">Happy</div>
+                <div class="floating-word">Learn</div>
+                <div class="floating-word">Game</div>
+                <div class="floating-word">Fun</div>
+            </div>
+            
+            <!-- 蛇头装饰 -->
+            <div class="snake-icon animate-float"></div>
+            
+            <!-- 主标题区域 -->
+            <div class="hero-section animate-slideInUp">
+                <div class="game-title-container">
+                    <h1 class="game-title">🐍 贪吃蛇单词</h1>
+                    <p class="fun-facts">💡 边玩边学，轻松记住2000+单词</p>
+                </div>
+                
+                <!-- 游戏设置面板 -->
+                <div class="settings-panel animate-scaleIn">
+                    <div class="setting-group">
+                        <label for="grade">单词范围</label>
+                        <select id="grade">
+                            <option value="1">一年级 (基础单词)</option>
+                            <option value="2">二年级 (进阶单词)</option>
+                            <option value="3" selected>三年级 (中级单词)</option>
+                            <option value="4">四年级 (中高级单词)</option>
+                            <option value="5">五年级 (高级单词)</option>
+                            <option value="6">六年级 (专业单词)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <label for="difficulty">游戏难度</label>
+                        <select id="difficulty">
+                            <option value="low">低 (慢速)</option>
+                            <option value="medium" selected>中 (中速)</option>
+                            <option value="high">高 (快速)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 菜单按钮 -->
+            <div class="menu-buttons animate-slideInUp">
+                <button class="primary-button start-button hover-lift" onclick="startGame()">
+                    🎮 开始游戏
+                </button>
+                <button class="primary-button success-button hover-lift" onclick="showVocabularyBook()">
+                    📚 单词本
+                </button>
+            </div>
+            
+            <!-- 音乐控制按钮 -->
+            <div class="audio-controls">
+                <button class="audio-control-btn" id="musicToggle" onclick="toggleBackgroundMusic()" title="背景音乐开关">
+                    <span id="musicIcon">🎵</span>
+                </button>
+            </div>
+            
+            <!-- 制作信息 -->
+            <div class="creator-info animate-fadeIn">
+                制作by公众号:泡泡妈AI育儿搭子
+            </div>
+        </div>
+    </div>
+
+    <script src="../audio/audioManager.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

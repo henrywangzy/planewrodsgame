@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏界面模块 - 互动游戏界面</title>
+    <link rel="stylesheet" href="../CoreStyles/variables.css">
+    <link rel="stylesheet" href="../CoreStyles/styles.css">
+    <link rel="stylesheet" href="../CoreStyles/animations.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="phone-container">
+        <div class="screen active">
+            <!-- 游戏顶部信息栏 -->
+            <div class="game-header animate-slideInDown">
+                <div class="header-left">
+                    <div class="target-info">
+                        目标: <strong id="targetWord">Apple</strong>（<span id="targetChinese">苹果</span>）
+                    </div>
+                    <div class="score-info">
+                        分数: <strong id="score">0</strong> | 关卡: <strong id="level">1</strong>
+                    </div>
+                </div>
+                <div class="header-controls">
+                    <button class="control-button" id="musicBtn" onclick="toggleMusic()" title="音乐开关">
+                        <span id="musicIcon">🎵</span>
+                    </button>
+                    <button class="control-button" onclick="backToHome()" title="返回主界面">
+                        🏠
+                    </button>
+                </div>
+            </div>
+
+            <!-- 游戏画布区域 -->
+            <div class="game-canvas animate-fadeIn" id="gameCanvas">
+                <!-- 游戏蛇身将在这里动态生成 -->
+                <div class="snake-container" id="snakeContainer">
+                    <!-- 蛇头 -->
+                    <div class="snake-segment snake-head" id="snakeHead" style="left: 100px; top: 100px;">
+                        <div class="eye left-eye"></div>
+                        <div class="eye right-eye"></div>
+                    </div>
+                    <!-- 蛇身段将动态添加 -->
+                </div>
+
+                <!-- 食物容器 -->
+                <div class="food-container" id="foodContainer">
+                    <!-- 目标食物 -->
+                    <div class="food-item target-food animate-pulse" id="targetFood" style="left: 200px; top: 150px;">
+                        <div class="word-english">Apple</div>
+                        <div class="word-chinese">苹果</div>
+                    </div>
+                    <!-- 干扰食物将动态添加 -->
+                </div>
+
+                <!-- 游戏控制按钮 -->
+                <div class="game-controls animate-slideInUp">
+                    <div class="direction-pad">
+                        <button class="control-btn" id="btn-up" onclick="changeDirection('up')">▲</button>
+                        <button class="control-btn" id="btn-left" onclick="changeDirection('left')">◀</button>
+                        <button class="control-btn pause-btn" id="btn-pause" onclick="togglePause()">❚❚</button>
+                        <button class="control-btn" id="btn-right" onclick="changeDirection('right')">▶</button>
+                        <button class="control-btn" id="btn-down" onclick="changeDirection('down')">▼</button>
+                    </div>
+                </div>
+
+                <!-- 字幕显示容器 -->
+                <div class="subtitle-container" id="subtitleContainer">
+                    <div class="subtitle-card animate-scaleIn">
+                        <div class="subtitle-english" id="subtitleEnglish">I eat an apple every day.</div>
+                        <div class="subtitle-chinese" id="subtitleChinese">我每天吃一个苹果。</div>
+                        <button class="subtitle-close" onclick="hideSubtitle()">✕</button>
+                    </div>
+                </div>
+
+                <!-- 游戏状态提示 -->
+                <div class="game-status" id="gameStatus">
+                    <div class="status-icon">🎮</div>
+                    <div class="status-text">游戏进行中...</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 暂停弹窗 -->
+    <div class="pause-modal" id="pauseModal">
+        <div class="modal-content animate-scaleIn">
+            <h3>⏸️ 游戏暂停</h3>
+            <p>准备好继续了吗？</p>
+            <div class="modal-buttons">
+                <button class="primary-button" onclick="resumeGame()">继续游戏</button>
+                <button class="button" onclick="backToHome()">返回主界面</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 升级提示弹窗 -->
+    <div class="level-up-modal" id="levelUpModal">
+        <div class="modal-content animate-scaleIn">
+            <h3>🎉 恭喜升级！</h3>
+            <div class="level-info">
+                <div class="new-level">关卡 <span id="newLevel">2</span></div>
+                <div class="bonus-score">奖励分数: +<span id="bonusScore">100</span></div>
+            </div>
+            <button class="primary-button" onclick="continueLevelUp()">继续挑战</button>
+        </div>
+    </div>
+
+    <!-- 音效反馈 -->
+    <div class="sound-feedback" id="soundFeedback">
+        <div class="sound-wave"></div>
+        <div class="sound-wave"></div>
+        <div class="sound-wave"></div>
+    </div>
+
+    <script src="../audio/audioManager.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

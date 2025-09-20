@@ -1,0 +1,282 @@
+/* 单词本样式 - 从snackwordsgame整合 */
+#vocabularyScreen {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 0;
+    overflow-y: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+}
+
+.vocabulary-header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    gap: 10px;
+    z-index: 100;
+}
+
+.back-button {
+    position: absolute;
+    left: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateX(-2px);
+}
+
+.vocabulary-header h2 {
+    color: white;
+    margin: 0;
+    text-align: center;
+    font-size: 1.2em;
+    justify-self: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    padding: 0 10px;
+}
+
+.vocabulary-header .grade-selector {
+    position: absolute;
+    right: 0;
+}
+
+.grade-selector select {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 15px;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+.vocabulary-header .search-container {
+    position: absolute;
+    left: calc(50% - 25px);
+    transform: translateX(-50%);
+    width: 97px;
+}
+
+.search-container input {
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1em;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.vocabulary-content {
+    background: transparent;
+    padding: 10px;
+    height: calc(100vh - 120px);
+    margin-top: 60px;
+    margin-bottom: 60px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.word-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.word-item {
+    background: white;
+    border-radius: 10px;
+    padding: 12px 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.word-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.word-item .word-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.word-item .word-text {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+}
+
+.word-item .pronunciation {
+    font-size: 0.8em;
+    color: #888;
+    font-style: italic;
+}
+
+.word-item .word-info {
+    flex: 1;
+}
+
+.word-item .word-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.word-item .chinese-text {
+    color: #4CAF50;
+    font-weight: 500;
+    font-size: 1em;
+}
+
+.word-item .example-text {
+    font-size: 0.85em;
+    color: #666;
+    line-height: 1.4;
+}
+
+.word-item .play-button {
+    background: #4CAF50;
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    transition: all 0.3s ease;
+}
+
+.word-item .play-button:hover {
+    background: #45a049;
+    transform: scale(1.1);
+}
+
+.word-item .learned-status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ddd;
+}
+
+.word-item.learned .learned-status {
+    background: #4CAF50;
+}
+
+.word-item.familiar .learned-status {
+    background: #FF9800;
+}
+
+.pagination {
+    position: fixed;
+    bottom: 25px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    z-index: 100;
+}
+
+.pagination .pagination-controls {
+    position: absolute;
+    left: 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.pagination .pagination-controls button {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9em;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.pagination .pagination-controls button:hover:not(:disabled) {
+    background: white;
+    transform: scale(1.05);
+}
+
+.pagination .pagination-controls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination .pagination-controls span {
+    color: white;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.pagination .vocab-stats {
+    position: absolute;
+    right: 0;
+    color: white;
+    font-size: 0.9em;
+    white-space: nowrap;
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+    .vocabulary-header {
+        top: 20px;
+    }
+    
+    .word-list {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .vocabulary-content {
+        padding: 10px;
+        margin-top: 80px;
+    }
+    
+    .word-item {
+        padding: 12px;
+    }
+    
+    .pagination {
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+    }
+}

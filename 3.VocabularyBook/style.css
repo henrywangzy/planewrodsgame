@@ -1,0 +1,542 @@
+/* 单词本模块专用样式 */
+
+/* 重置基础屏幕背景 */
+.screen {
+    background: var(--gradient-main);
+    padding: 0;
+    transform: none;
+}
+
+/* 单词本头部 */
+.vocabulary-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    padding: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-elevated);
+}
+
+.back-button {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-large);
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all var(--transition-normal);
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateX(-2px);
+}
+
+.vocabulary-header h2 {
+    color: white;
+    margin: 0;
+    text-align: center;
+    font-size: 1.4em;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.grade-selector select {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    padding: var(--spacing-sm) 12px;
+    border-radius: var(--border-radius-medium);
+    font-size: 0.9em;
+    cursor: pointer;
+    color: var(--text-dark);
+}
+
+/* 搜索和筛选区域 */
+.search-container {
+    padding: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.search-container input {
+    width: 100%;
+    padding: 12px var(--spacing-md);
+    border: none;
+    border-radius: var(--border-radius-large);
+    font-size: 1em;
+    background: rgba(255, 255, 255, 0.9);
+    margin-bottom: var(--spacing-sm);
+}
+
+.search-container input::placeholder {
+    color: var(--text-light);
+}
+
+.filter-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: center;
+}
+
+.filter-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: transparent;
+    color: white;
+    border-radius: var(--border-radius-large);
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all var(--transition-normal);
+}
+
+.filter-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.filter-btn.active {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.6);
+    font-weight: bold;
+}
+
+/* 单词内容区域 */
+.vocabulary-content {
+    flex: 1;
+    padding: var(--spacing-md) 4px; /* 上下保持16px，左右设为4px实现接近贴边的效果 */
+    overflow-y: auto;
+    max-height: calc(100vh - 220px);
+}
+
+.word-list {
+    display: grid;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* 单词项样式 */
+.word-item {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--border-radius-medium);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
+    position: relative;
+    cursor: pointer;
+}
+
+.word-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    background: rgba(255, 255, 255, 1);
+}
+
+.word-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-sm);
+}
+
+.word-main {
+    flex: 1;
+}
+
+.word-text {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: var(--text-dark);
+    margin-bottom: 2px;
+}
+
+.word-pronunciation {
+    font-size: var(--font-size-sm);
+    color: var(--text-medium);
+    font-style: italic;
+}
+
+.word-controls {
+    display: flex;
+    gap: var(--spacing-xs);
+    align-items: center;
+}
+
+.play-button {
+    background: var(--primary-green);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    transition: all var(--transition-normal);
+}
+
+.play-button:hover {
+    background: var(--primary-green-dark);
+    transform: scale(1.1);
+}
+
+.chinese-text {
+    color: var(--primary-green);
+    font-weight: 600;
+    font-size: 1.1em;
+    margin: var(--spacing-xs) 0;
+}
+
+.example-text {
+    font-size: var(--font-size-sm);
+    color: var(--text-medium);
+    line-height: 1.5;
+    border-left: 3px solid var(--primary-green);
+    padding-left: var(--spacing-sm);
+    margin-top: var(--spacing-xs);
+}
+
+/* 学习状态指示器 */
+.progress-indicator {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--border-light);
+}
+
+.word-item.learned .progress-indicator {
+    background: var(--primary-green);
+    border-color: var(--primary-green);
+}
+
+.word-item.learning .progress-indicator {
+    background: var(--secondary-orange);
+    border-color: var(--secondary-orange);
+}
+
+.word-item.new .progress-indicator {
+    background: var(--border-light);
+}
+
+/* 底部统计和分页 */
+.vocabulary-footer {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    gap: var(--spacing-md);
+}
+
+.vocab-stats {
+    color: white;
+    font-size: var(--font-size-sm);
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.pagination-controls button {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    transition: all var(--transition-normal);
+}
+
+.pagination-controls button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.pagination-controls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#pageInfo {
+    color: white;
+    font-size: var(--font-size-sm);
+    min-width: 50px;
+    text-align: center;
+}
+
+/* 单词详情弹窗 */
+.word-detail-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: var(--z-modal);
+    padding: var(--spacing-md);
+    box-sizing: border-box;
+}
+
+.word-detail-modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: var(--border-radius-medium);
+    width: 100%;
+    max-width: 350px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+}
+
+.word-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-sm);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.word-detail-header h3 {
+    color: var(--text-dark);
+    margin: 0;
+    font-size: 1.8em;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: var(--text-medium);
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    border-radius: 50%;
+    transition: all var(--transition-normal);
+}
+
+.close-button:hover {
+    background: var(--border-light);
+    color: var(--text-dark);
+}
+
+.word-detail-body {
+    padding: var(--spacing-lg);
+}
+
+.pronunciation-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+#detailPronunciation {
+    font-style: italic;
+    color: var(--text-medium);
+    font-size: 1.1em;
+    flex: 1;
+}
+
+.audio-controls {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.play-button-small {
+    background: var(--primary-green);
+    border: none;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7em;
+    transition: all var(--transition-normal);
+}
+
+.play-button-small:hover {
+    background: var(--primary-green-dark);
+    transform: scale(1.1);
+}
+
+.chinese-meaning {
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-sm);
+}
+
+#detailChinese {
+    font-size: 1.4em;
+    color: var(--primary-green);
+}
+
+.example-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.example-label {
+    font-weight: bold;
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-xs);
+}
+
+.example-text {
+    background: var(--bg-light);
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius-small);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-sm);
+    border-left: none;
+}
+
+.progress-section {
+    border-top: 1px solid var(--border-light);
+    padding-top: var(--spacing-md);
+}
+
+.progress-label {
+    font-weight: bold;
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-sm);
+}
+
+.progress-buttons {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.progress-btn {
+    flex: 1;
+    padding: var(--spacing-sm);
+    border: 2px solid var(--border-light);
+    background: white;
+    color: var(--text-medium);
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    transition: all var(--transition-normal);
+}
+
+.progress-btn:hover {
+    border-color: var(--primary-green);
+}
+
+.progress-btn.active {
+    background: var(--primary-green);
+    border-color: var(--primary-green);
+    color: white;
+}
+
+/* 朗读反馈弹窗 */
+.speech-feedback {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--border-radius-medium);
+    display: none;
+    z-index: var(--z-tooltip);
+    animation: pulse 1s infinite;
+}
+
+.speech-feedback.active {
+    display: block;
+}
+
+.speech-content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.speech-icon {
+    font-size: 1.2em;
+}
+
+/* 空状态 */
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.empty-state-icon {
+    font-size: 3em;
+    margin-bottom: var(--spacing-md);
+}
+
+.empty-state-text {
+    font-size: 1.1em;
+    margin-bottom: var(--spacing-sm);
+}
+
+.empty-state-hint {
+    font-size: var(--font-size-sm);
+    opacity: 0.7;
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+    .vocabulary-header {
+        padding: var(--spacing-sm);
+    }
+    
+    .vocabulary-header h2 {
+        font-size: 1.2em;
+    }
+    
+    .word-list {
+        gap: var(--spacing-xs);
+    }
+    
+    .word-item {
+        padding: var(--spacing-sm);
+    }
+    
+    .word-text {
+        font-size: 1.1em;
+    }
+    
+    .vocabulary-footer {
+        padding: var(--spacing-sm);
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+    
+    .vocab-stats {
+        order: 2;
+    }
+    
+    .pagination-controls {
+        order: 1;
+    }
+}

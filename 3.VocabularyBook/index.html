@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单词本模块 - 词汇学习界面</title>
+    <link rel="stylesheet" href="../CoreStyles/variables.css">
+    <link rel="stylesheet" href="../CoreStyles/styles.css">
+    <link rel="stylesheet" href="../CoreStyles/animations.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="phone-container">
+        <div class="screen active">
+            <!-- 单词本头部 -->
+            <div class="vocabulary-header animate-slideInDown">
+                <button class="back-button hover-scale" onclick="backToHome()">← 返回</button>
+                <h2>📚 单词本</h2>
+                <div class="grade-selector">
+                    <select id="vocabGradeSelect" onchange="changeVocabGrade()">
+                        <option value="1">1年级</option>
+                        <option value="2">2年级</option>
+                        <option value="3" selected>3年级</option>
+                        <option value="4">4年级</option>
+                        <option value="5">5年级</option>
+                        <option value="6">6年级</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 搜索和筛选 -->
+            <div class="search-container animate-slideInDown">
+                <input type="text" id="vocabSearch" placeholder="搜索单词..." oninput="searchWords()">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all" onclick="filterWords('all')">全部</button>
+                    <button class="filter-btn" data-filter="learned" onclick="filterWords('learned')">已学</button>
+                    <button class="filter-btn" data-filter="learning" onclick="filterWords('learning')">学习中</button>
+                </div>
+            </div>
+
+            <!-- 单词内容区域 -->
+            <div class="vocabulary-content animate-fadeIn">
+                <div class="word-list" id="wordList">
+                    <!-- 单词列表将通过JavaScript动态生成 -->
+                </div>
+            </div>
+
+            <!-- 底部统计和分页 -->
+            <div class="vocabulary-footer animate-slideInUp">
+                <div class="vocab-stats">
+                    <span id="vocabCount">总数: 0</span>
+                    <span id="learnedCount">已学: 0</span>
+                </div>
+                <div class="pagination-controls">
+                    <button id="prevPage" onclick="changePage(-1)" disabled>上一页</button>
+                    <span id="pageInfo">1 / 1</span>
+                    <button id="nextPage" onclick="changePage(1)" disabled>下一页</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 单词详情弹窗 -->
+    <div class="word-detail-modal" id="wordDetailModal">
+        <div class="modal-content animate-scaleIn">
+            <div class="word-detail-header">
+                <h3 id="detailWord">Apple</h3>
+                <button class="close-button" onclick="closeWordDetail()">✕</button>
+            </div>
+            <div class="word-detail-body">
+                <div class="pronunciation-section">
+                    <span id="detailPronunciation">/ˈæp.əl/</span>
+                    <div class="audio-controls">
+                        <button class="play-button hover-scale" onclick="playCurrentWord()" title="完整朗读">🔊</button>
+                        <button class="play-button-small hover-scale" onclick="stopSpeech()" title="停止朗读">⏹️</button>
+                    </div>
+                </div>
+                <div class="chinese-meaning">
+                    <strong id="detailChinese">苹果</strong>
+                    <button class="play-button-small hover-scale" onclick="playChineseMeaning()" title="朗读中文">🔊</button>
+                </div>
+                <div class="example-section">
+                    <div class="example-label">例句：</div>
+                    <div class="example-text" id="detailExample">I eat an apple every day. 我每天吃一个苹果。</div>
+                    <button class="play-button hover-scale" onclick="playCurrentExample()" title="朗读例句">🔊</button>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-label">学习进度：</div>
+                    <div class="progress-buttons">
+                        <button class="progress-btn" data-status="new" onclick="setWordProgress('new')">未学</button>
+                        <button class="progress-btn" data-status="learning" onclick="setWordProgress('learning')">学习中</button>
+                        <button class="progress-btn active" data-status="learned" onclick="setWordProgress('learned')">已掌握</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 朗读反馈弹窗 -->
+    <div class="speech-feedback" id="speechFeedback">
+        <div class="speech-content">
+            <div class="speech-icon">🔊</div>
+            <div class="speech-text">正在朗读...</div>
+        </div>
+    </div>
+
+    <script src="../audio/audioManager.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

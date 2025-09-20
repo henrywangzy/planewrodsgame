@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏结束模块 - 结果反馈界面</title>
+    <link rel="stylesheet" href="../CoreStyles/variables.css">
+    <link rel="stylesheet" href="../CoreStyles/styles.css">
+    <link rel="stylesheet" href="../CoreStyles/animations.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="phone-container">
+        <div class="screen active">
+            <!-- 游戏结果动画区域 -->
+            <div class="result-animation animate-scaleIn">
+                <div class="game-over-icon animate-shake">🐍💧</div>
+                <div class="result-title" id="resultTitle">游戏结束</div>
+                <div class="result-subtitle" id="resultSubtitle">继续努力，你一定可以的！</div>
+            </div>
+
+            <!-- 分数和成就展示 -->
+            <div class="score-display animate-slideInUp">
+                <div class="final-score">
+                    <div class="score-label">最终得分</div>
+                    <div class="score-value" id="finalScore">1250</div>
+                </div>
+                
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <div class="stat-icon">📚</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="wordsLearned">18</div>
+                            <div class="stat-label">学会单词</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="accuracy">85%</div>
+                            <div class="stat-label">正确率</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="maxLevel">3</div>
+                            <div class="stat-label">最高关卡</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-icon">⏱️</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="gameTime">05:32</div>
+                            <div class="stat-label">游戏时间</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 学习回顾区域 -->
+            <div class="learning-review animate-slideInUp">
+                <div class="review-header">
+                    <h3>📖 本次学习回顾</h3>
+                    <div class="review-toggle">
+                        <button class="toggle-btn active" data-type="learned" onclick="switchReviewType('learned')">已学会</button>
+                        <button class="toggle-btn" data-type="difficult" onclick="switchReviewType('difficult')">待加强</button>
+                    </div>
+                </div>
+                
+                <div class="word-review-list" id="wordReviewList">
+                    <!-- 单词回顾列表将动态生成 -->
+                </div>
+                
+                <div class="review-summary" id="reviewSummary">
+                    <div class="summary-text">恭喜！你已经掌握了 <span class="highlight" id="learnedCount">18</span> 个新单词</div>
+                </div>
+            </div>
+
+            <!-- 成就徽章 -->
+            <div class="achievements animate-slideInUp">
+                <div class="achievement-title">🏆 本次成就</div>
+                <div class="badge-list" id="badgeList">
+                    <!-- 成就徽章将动态生成 -->
+                </div>
+            </div>
+
+            <!-- 操作按钮 -->
+            <div class="action-buttons animate-slideInUp">
+                <button class="primary-button retry-button hover-lift" onclick="restartGame()">
+                    🔄 重新开始
+                </button>
+                <button class="primary-button review-button hover-lift" onclick="reviewWords()">
+                    📚 查看单词本
+                </button>
+                <button class="button back-button hover-lift" onclick="backToHome()">
+                    🏠 返回主界面
+                </button>
+            </div>
+
+            <!-- 分享和记录 -->
+            <div class="share-section animate-fadeIn">
+                <div class="share-title">分享你的成绩</div>
+                <div class="share-buttons">
+                    <button class="share-btn" onclick="shareResult('copy')" title="复制成绩">📋</button>
+                    <button class="share-btn" onclick="shareResult('image')" title="生成图片">📷</button>
+                    <button class="share-btn" onclick="shareResult('social')" title="分享到社交媒体">📤</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 单词详情弹窗 -->
+    <div class="word-detail-modal" id="wordDetailModal">
+        <div class="modal-content animate-scaleIn">
+            <div class="word-detail-header">
+                <h3 id="modalWord">Apple</h3>
+                <div class="word-actions">
+                    <button class="play-button hover-scale" onclick="playModalWord()">🔊</button>
+                    <button class="close-button" onclick="closeWordModal()">✕</button>
+                </div>
+            </div>
+            <div class="word-detail-body">
+                <div class="pronunciation" id="modalPronunciation">/ˈæp.əl/</div>
+                <div class="chinese-meaning" id="modalChinese">苹果</div>
+                <div class="example-text" id="modalExample">I eat an apple every day. 我每天吃一个苹果。</div>
+                <div class="mastery-status" id="modalMastery">
+                    <span class="status-badge learned">✓ 已掌握</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 重新开始确认弹窗 -->
+    <div class="confirm-modal" id="restartModal">
+        <div class="modal-content animate-scaleIn">
+            <h3>🔄 确认重新开始</h3>
+            <p>你确定要开始新的游戏吗？<br>当前进度将会丢失。</p>
+            <div class="modal-buttons">
+                <button class="primary-button" onclick="confirmRestart()">确定重新开始</button>
+                <button class="button" onclick="cancelRestart()">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 分享结果弹窗 -->
+    <div class="share-modal" id="shareModal">
+        <div class="modal-content animate-scaleIn">
+            <h3>📤 分享成绩</h3>
+            <div class="share-preview" id="sharePreview">
+                <div class="share-card">
+                    <div class="share-header">🐍 贪吃蛇单词</div>
+                    <div class="share-score">我得了 <span id="shareScore">1250</span> 分！</div>
+                    <div class="share-stats">学会了 <span id="shareWords">18</span> 个单词</div>
+                </div>
+            </div>
+            <div class="share-actions">
+                <button class="primary-button" onclick="copyShareText()">复制文字</button>
+                <button class="button" onclick="closeShareModal()">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
