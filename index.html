@@ -2843,8 +2843,8 @@
             constructor(x, y, word, chinese, isTarget = false) {
                 this.x = x;
                 this.y = y;
-                this.width = 35;
-                this.height = 45; // 增加高度以适配双行文字
+                this.width = 45;  // 增大宽度，使碰撞更容易
+                this.height = 50; // 增大高度，使碰撞更容易
                 this.word = word;
                 this.chinese = chinese || ''; // 中文释义
                 this.isTarget = isTarget;
@@ -3344,10 +3344,23 @@
         }
         
         function isColliding(obj1, obj2) {
-            return obj1.x < obj2.x + obj2.width / 2 &&
-                   obj1.x + obj1.width / 2 > obj2.x &&
-                   obj1.y < obj2.y + obj2.height / 2 &&
-                   obj1.y + obj1.height / 2 > obj2.y;
+            // 考虑到敌机和玩家都是以中心点为坐标，需要调整碰撞检测
+            // obj1 通常是子弹，obj2 通常是敌机
+            const obj1Left = obj1.x - obj1.width / 2;
+            const obj1Right = obj1.x + obj1.width / 2;
+            const obj1Top = obj1.y - obj1.height / 2;
+            const obj1Bottom = obj1.y + obj1.height / 2;
+
+            const obj2Left = obj2.x - obj2.width / 2;
+            const obj2Right = obj2.x + obj2.width / 2;
+            const obj2Top = obj2.y - obj2.height / 2;
+            const obj2Bottom = obj2.y + obj2.height / 2;
+
+            // 检测矩形碰撞
+            return obj1Left < obj2Right &&
+                   obj1Right > obj2Left &&
+                   obj1Top < obj2Bottom &&
+                   obj1Bottom > obj2Top;
         }
         
         function upgradeWeapon() {
