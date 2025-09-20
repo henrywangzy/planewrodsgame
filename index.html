@@ -2017,15 +2017,11 @@
 
         <!-- 单词本界面 (从snackwordsgame整合) -->
         <div id="vocabularyScreen" class="screen">
-            <div class="vocabulary-header">
-                <button class="back-button" onclick="backToMenu()">⬅️ 返回</button>
-                <h2 class="vocabulary-title">📚 单词本</h2>
-                <div class="search-container">
-                    <input type="text" id="vocabSearch" placeholder="搜索单词..." oninput="searchWords()">
-                </div>
-                <div class="grade-selector">
-                    <select id="vocabGradeSelect" onchange="changeVocabGrade()">
-                        <option value="">全部年级</option>
+            <div class="vocab-header-compact">
+                <button class="back-btn-compact" onclick="backToMenu()">⬅️</button>
+                <h2 class="vocab-title-compact">📚 单词本</h2>
+                <select class="grade-select-compact" id="vocabGradeSelect" onchange="changeVocabGrade()">
+                    <option value="">全部年级</option>
                         <option value="1">1年级</option>
                         <option value="2">2年级</option>
                         <option value="3">3年级</option>
@@ -2033,7 +2029,7 @@
                         <option value="5">5年级</option>
                         <option value="6">6年级</option>
                     </select>
-                </div>
+                <input type="text" class="search-compact" id="vocabSearch" placeholder="搜索..." oninput="searchWords()">
             </div>
 
             <div class="vocabulary-content">
@@ -3659,25 +3655,38 @@
                 
                 const statusClass = isLearned ? 'learned' : 'learning';
                 
+                // 提取例句
+                let englishExample = '';
+                let chineseExampleText = '';
+                if (wordObj.example && wordObj.example.trim()) {
+                    // 分离英文和中文例句
+                    const parts = wordObj.example.split(/[。！？!?.]/);
+                    if (parts.length > 0) {
+                        englishExample = parts[0].trim() + (wordObj.example.match(/[.!?]/) ? wordObj.example.match(/[.!?]/)[0] : '.');
+                        if (parts.length > 1) {
+                            chineseExampleText = parts.slice(1).join('。').trim();
+                        }
+                    }
+                }
+
                 html += `
                     <div class="word-item ${statusClass}">
-                        <div class="word-item-header">
-                            <div class="word-main">
-                                <div class="word-line">
-                                    <span class="word-text">${wordObj.word}</span>
-                                    <span class="word-pronunciation">/${phonetic}/</span>
-                                </div>
-                                <div class="chinese-line">
-                                    <span class="chinese-text">${chinese}</span>
-                                </div>
+                        <div class="word-header-compact">
+                            <div class="word-info-compact">
+                                <span class="word-text">${wordObj.word}</span>
+                                <span class="pronunciation-compact">/${phonetic}/</span>
+                                <span class="chinese-compact">${chinese}</span>
                             </div>
-                            <div class="word-controls">
-                                <button class="play-button" onclick="playWordAudio('${wordObj.word}', '${chinese}', '${sentence}')" title="播放发音">
-                                    🔊
-                                </button>
-                            </div>
+                            <button class="play-btn-compact" onclick="playWordAudio('${wordObj.word}', '${chinese}', '${wordObj.example || ''}')" title="播放">
+                                🔊
+                            </button>
                         </div>
-                        ${sentence || chineseSentence ? `<div class="example-section">${sentence ? `<div class="example-en">${sentence}</div>` : ''}${chineseSentence ? `<div class="example-cn">${chineseSentence}</div>` : ''}</div>` : ''}
+                        ${englishExample || chineseExampleText ? `
+                            <div class="example-compact">
+                                ${englishExample ? `<span class="example-en-compact">${englishExample}</span>` : ''}
+                                ${chineseExampleText ? `<span class="example-cn-compact">${chineseExampleText}</span>` : ''}
+                            </div>
+                        ` : ''}
                     </div>
                 `;
             });
