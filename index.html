@@ -3891,7 +3891,7 @@
                 chineseExample = extractChinese(wordData.example);
             }
 
-            // 创建统一弹窗
+            // 创建统一弹窗 - 透明背景
             const dialog = document.createElement('div');
             dialog.className = 'unified-word-dialog';
             dialog.style.cssText = `
@@ -3899,32 +3899,31 @@
                 top: 35%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                background: linear-gradient(135deg, rgba(0,0,0,0.9), rgba(0,0,0,0.8));
+                background: transparent;
                 color: white;
-                padding: 20px 25px;
+                padding: 15px 20px;
                 border-radius: 12px;
                 z-index: 10001;
                 max-width: 340px;
                 min-width: 280px;
-                box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-                border: 1px solid rgba(255,255,255,0.1);
                 text-align: center;
                 pointer-events: none;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6);
             `;
 
-            // 构建内容
+            // 构建内容 - 增强文字对比度
             let content = `
-                <div style="margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.2);">
-                    <span style="font-size: 24px; font-weight: bold; color: #4CAF50;">${wordData.word}</span>
-                    <span style="font-size: 18px; color: #FFD700; margin-left: 12px;">${wordData.chinese}</span>
+                <div style="margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid rgba(255,255,255,0.5);">
+                    <span style="font-size: 28px; font-weight: bold; color: #00FF00; text-shadow: 2px 2px 4px rgba(0,0,0,1);">${wordData.word}</span>
+                    <span style="font-size: 20px; color: #FFFF00; margin-left: 12px; text-shadow: 2px 2px 4px rgba(0,0,0,1);">${wordData.chinese}</span>
                 </div>
             `;
 
-            // 添加例句（如果有）
+            // 添加例句（如果有）- 增强可读性
             if (englishExample) {
                 content += `
-                    <div style="margin-bottom: 8px;">
-                        <div style="font-size: 15px; color: #E3F2FD; line-height: 1.5;">${englishExample}</div>
+                    <div style="margin-bottom: 6px;">
+                        <div style="font-size: 16px; color: #FFFFFF; line-height: 1.4; font-weight: 500; text-shadow: 2px 2px 3px rgba(0,0,0,1);">${englishExample}</div>
                     </div>
                 `;
             }
@@ -3932,7 +3931,7 @@
             if (chineseExample) {
                 content += `
                     <div>
-                        <div style="font-size: 14px; color: #FFF9C4; line-height: 1.5;">${chineseExample}</div>
+                        <div style="font-size: 15px; color: #FFE082; line-height: 1.4; text-shadow: 2px 2px 3px rgba(0,0,0,1);">${chineseExample}</div>
                     </div>
                 `;
             }

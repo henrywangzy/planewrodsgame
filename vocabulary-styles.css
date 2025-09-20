@@ -83,7 +83,7 @@
 
 .vocabulary-content {
     background: transparent;
-    padding: 8px;
+    padding: 4px;
     height: calc(100vh - 110px);
     margin-top: 0;
     overflow-y: auto;
@@ -93,18 +93,20 @@
 .word-list {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
     margin-bottom: 60px;
+    padding: 0;
 }
 
-/* 紧凑型单词卡片 */
+/* 紧凑型单词卡片 - 最小化边距 */
 .word-item {
     background: white;
-    border-radius: 8px;
-    padding: 8px 10px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-radius: 6px;
+    padding: 8px;
+    margin: 0 2px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
     transition: all 0.2s ease;
-    width: 100%;
+    width: calc(100% - 4px);
     box-sizing: border-box;
 }
 
@@ -321,17 +323,20 @@
     }
 
     .word-list {
-        gap: 5px;
+        gap: 3px;
+        padding: 0;
     }
 
     .vocabulary-content {
-        padding: 6px;
+        padding: 3px;
         height: calc(100vh - 100px);
     }
 
     .word-item {
-        padding: 6px 8px;
-        border-radius: 6px;
+        padding: 6px;
+        margin: 0 1px;
+        border-radius: 5px;
+        width: calc(100% - 2px);
     }
 
     .word-info-compact .word-text {
