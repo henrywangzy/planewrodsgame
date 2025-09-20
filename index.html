@@ -2413,13 +2413,16 @@
         
         function playWordReading(wordData) {
             console.log('🔊 开始完整单词朗读流程:', wordData);
-            
+
             // 检查游戏状态
             if (gamePaused || !gameRunning) {
                 console.log('⏸️ 游戏暂停或结束，跳过语音播放');
                 return;
             }
-            
+
+            // 显示统一的单词学习弹窗
+            showUnifiedWordDialog(wordData);
+
             // 重置朗读状态
             wordReadingInProgress = true;
             wordReadingPhase = 0;
@@ -2455,7 +2458,7 @@
                     case 0:
                         // 阶段1: 朗读英文单词
                         console.log('📜 阶段1: 朗读英文单词 -', wordData.word);
-                        showNotification(`🔊 ${wordData.word}`, '#4CAF50'); // 同步显示字幕
+                        // 不再显示单独的通知，统一弹窗已经显示
                         const englishUtterance = new SpeechSynthesisUtterance(wordData.word);
                         englishUtterance.lang = 'en-US';
                         englishUtterance.rate = 0.8;
@@ -2472,9 +2475,9 @@
                         break;
                         
                     case 1:
-                        // 阶段2: 朗读中文释义
+                        // 阶段2: 戗读中文释义
                         console.log('📜 阶段2: 朗读中文释义 -', wordData.chinese);
-                        showNotification(`📖 ${wordData.chinese}`, '#2196F3'); // 同步显示中文字幕
+                        // 不再显示单独的通知，统一弹窗已经显示
                         const chineseUtterance = new SpeechSynthesisUtterance(wordData.chinese);
                         chineseUtterance.lang = 'zh-CN';
                         chineseUtterance.rate = 1.0;
@@ -2495,7 +2498,7 @@
                         if (wordData.example && wordData.example.trim()) {
                             const englishExample = extractEnglish(wordData.example);
                             console.log('📜 阶段3: 朗读英文例句 -', englishExample);
-                            showExampleDialog(englishExample, ''); // 显示英文例句
+                            // 不再显示单独的例句弹窗，统一弹窗已经显示
                             
                             const englishExampleUtterance = new SpeechSynthesisUtterance(englishExample);
                             englishExampleUtterance.lang = 'en-US';
@@ -2523,7 +2526,7 @@
                             const chineseExample = extractChinese(wordData.example);
                             if (chineseExample && chineseExample.trim()) {
                                 console.log('📜 阶段4: 朗读中文例句 -', chineseExample);
-                                showExampleDialog('', chineseExample); // 显示中文例句
+                                // 不再显示单独的例句弹窗，统一弹窗已经显示
                                 
                                 const chineseExampleUtterance = new SpeechSynthesisUtterance(chineseExample);
                                 chineseExampleUtterance.lang = 'zh-CN';
@@ -2570,19 +2573,22 @@
         // 🔥 新增：击中目标敌机后启动完整朗读流程的函数
         function startCompleteWordReading(wordData) {
             console.log('🎯 开始完整单词朗读流程:', wordData.word);
-            
+
             // 清除任何现有的自动切换计时器
             if (autoSwitchTimeout) {
                 clearTimeout(autoSwitchTimeout);
                 autoSwitchTimeout = null;
             }
-            
+
             // 设置朗读状态标志
             wordReadingInProgress = true;
             wordReadingPhase = 0;
             wordReadingComplete = false;
             forceTargetSpawn = false; // 朗读期间不强制生成目标敌机
-            
+
+            // 显示统一的单词学习弹窗
+            showUnifiedWordDialog(wordData);
+
             // 如果音频已启用，开始朗读流程
             if (audioEnabled) {
                 startReadingPhase(wordData);
@@ -3292,14 +3298,7 @@
                                 showNotification('❤️ 血槽恢复！', '#4CAF50');
                             }
                             
-                            // 显示单词例句弹窗
-                            if (currentWordData.example && currentWordData.example.trim()) {
-                                const englishExample = extractEnglish(currentWordData.example);
-                                const chineseExample = extractChinese(currentWordData.example);
-                                if (englishExample || chineseExample) {
-                                    showExampleDialog(englishExample || '', chineseExample || '');
-                                }
-                            }
+                            // 不再在击中时显示单独的例句弹窗，因为已经在startCompleteWordReading中统一显示
                             
                             // 记录已学习单词
                             if (!learnedWords.find(w => w.word === currentWordData.word)) {
@@ -3664,9 +3663,13 @@
                     <div class="word-item ${statusClass}">
                         <div class="word-item-header">
                             <div class="word-main">
-                                <span class="word-text">${wordObj.word}</span>
-                                <span class="word-pronunciation">/${phonetic}/</span>
-                                <span class="chinese-text">${chinese}</span>
+                                <div class="word-line">
+                                    <span class="word-text">${wordObj.word}</span>
+                                    <span class="word-pronunciation">/${phonetic}/</span>
+                                </div>
+                                <div class="chinese-line">
+                                    <span class="chinese-text">${chinese}</span>
+                                </div>
                             </div>
                             <div class="word-controls">
                                 <button class="play-button" onclick="playWordAudio('${wordObj.word}', '${chinese}', '${sentence}')" title="播放发音">
@@ -3674,7 +3677,7 @@
                                 </button>
                             </div>
                         </div>
-                        ${sentence || chineseSentence ? `<div class="example-text">${sentence}${chineseSentence ? ' ' + chineseSentence : ''}</div>` : ''}
+                        ${sentence || chineseSentence ? `<div class="example-section">${sentence ? `<div class="example-en">${sentence}</div>` : ''}${chineseSentence ? `<div class="example-cn">${chineseSentence}</div>` : ''}</div>` : ''}
                     </div>
                 `;
             });
@@ -3842,27 +3845,105 @@
             // 🔥 修复字幕重叠问题：先清除所有现有的例句弹窗
             const existingDialogs = document.querySelectorAll('.example-dialog');
             existingDialogs.forEach(dialog => dialog.remove());
-            
+
             // 创建简洁透明的例句弹窗
             const dialog = document.createElement('div');
             dialog.className = 'example-dialog';
             dialog.style.cssText = 'position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.4);color:white;padding:12px 16px;border-radius:8px;z-index:10001;max-width:300px;font-size:14px;line-height:1.4;text-align:center;pointer-events:none';
-            
+
             dialog.innerHTML = `
                 <div style="font-size: 16px; margin-bottom: 6px;">${englishExample}</div>
                 <div style="font-size: 14px; color: #FFD700;">${chineseExample}</div>
             `;
-            
+
             document.body.appendChild(dialog);
-            
+
             // 3秒后自动关闭
             setTimeout(() => {
                 if (dialog && dialog.parentElement) {
                     dialog.remove();
                 }
             }, 3000);
-            
+
             console.log('📚 显示例句弹窗 (已清理重叠):', englishExample, '/', chineseExample);
+        }
+
+        // 新增：统一的单词学习弹窗
+        function showUnifiedWordDialog(wordData) {
+            // 清除所有现有的弹窗
+            const existingDialogs = document.querySelectorAll('.unified-word-dialog, .example-dialog');
+            existingDialogs.forEach(dialog => dialog.remove());
+
+            // 提取英文和中文例句
+            let englishExample = '';
+            let chineseExample = '';
+            if (wordData.example && wordData.example.trim()) {
+                englishExample = extractEnglish(wordData.example);
+                chineseExample = extractChinese(wordData.example);
+            }
+
+            // 创建统一弹窗
+            const dialog = document.createElement('div');
+            dialog.className = 'unified-word-dialog';
+            dialog.style.cssText = `
+                position: fixed;
+                top: 35%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(135deg, rgba(0,0,0,0.9), rgba(0,0,0,0.8));
+                color: white;
+                padding: 20px 25px;
+                border-radius: 12px;
+                z-index: 10001;
+                max-width: 340px;
+                min-width: 280px;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+                border: 1px solid rgba(255,255,255,0.1);
+                text-align: center;
+                pointer-events: none;
+            `;
+
+            // 构建内容
+            let content = `
+                <div style="margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.2);">
+                    <span style="font-size: 24px; font-weight: bold; color: #4CAF50;">${wordData.word}</span>
+                    <span style="font-size: 18px; color: #FFD700; margin-left: 12px;">${wordData.chinese}</span>
+                </div>
+            `;
+
+            // 添加例句（如果有）
+            if (englishExample) {
+                content += `
+                    <div style="margin-bottom: 8px;">
+                        <div style="font-size: 15px; color: #E3F2FD; line-height: 1.5;">${englishExample}</div>
+                    </div>
+                `;
+            }
+
+            if (chineseExample) {
+                content += `
+                    <div>
+                        <div style="font-size: 14px; color: #FFF9C4; line-height: 1.5;">${chineseExample}</div>
+                    </div>
+                `;
+            }
+
+            dialog.innerHTML = content;
+            document.body.appendChild(dialog);
+
+            // 显示时长根据内容调整
+            const displayTime = (englishExample || chineseExample) ? 6000 : 4000;
+
+            // 自动关闭
+            setTimeout(() => {
+                if (dialog && dialog.parentElement) {
+                    dialog.style.transition = 'opacity 0.5s';
+                    dialog.style.opacity = '0';
+                    setTimeout(() => dialog.remove(), 500);
+                }
+            }, displayTime);
+
+            console.log('📚 显示统一单词学习弹窗:', wordData.word, wordData.chinese);
         }
 
         // ============================================
