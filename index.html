@@ -868,26 +868,29 @@
             border-color: rgba(244, 67, 54, 0.5);
         }
 
-        /* 返回按钮 */
+        /* 返回按钮 - 优化可见性 */
         .back-button {
             position: relative;
             top: 0;
             left: 0;
             width: 40px;
             height: 40px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.4);
+            background: linear-gradient(135deg, rgba(244, 67, 54, 0.9), rgba(233, 30, 99, 0.9));
+            border: 2px solid rgba(255, 255, 255, 0.8);
             border-radius: 50%;
-            color: var(--text-light);
-            font-size: 1.2rem;
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: bold;
             cursor: pointer;
             pointer-events: auto;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-            z-index: 4;
+            z-index: 9999;
             flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4), 0 0 20px rgba(244, 67, 54, 0.2);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .back-button:hover {
@@ -1898,7 +1901,7 @@
                 <div class="game-header">
                     <div class="header-left">
                         <!-- 返回按钮 -->
-                        <button id="backBtn" class="back-button">←</button>
+                        <button id="backBtn" class="back-button">🔙</button>
                         <div class="target-info">
                             <div class="target-word" id="targetWord">目标: Loading...</div>
                             <div class="target-chinese" id="targetChinese">加载中...</div>
@@ -2004,7 +2007,7 @@
         <!-- 单词本界面 (从snackwordsgame整合) -->
         <div id="vocabularyScreen" class="screen">
             <div class="vocabulary-header">
-                <button class="back-button" onclick="backToMenu()">← 返回</button>
+                <button class="back-button" onclick="backToMenu()">🔙 返回</button>
                 <div class="search-container">
                     <input type="text" id="vocabSearch" placeholder="搜索单词..." oninput="searchWords()">
                 </div>
@@ -2439,12 +2442,13 @@
                     case 0:
                         // 阶段1: 朗读英文单词
                         console.log('📜 阶段1: 朗读英文单词 -', wordData.word);
+                        showNotification(`🔊 ${wordData.word}`, '#4CAF50'); // 同步显示字幕
                         const englishUtterance = new SpeechSynthesisUtterance(wordData.word);
                         englishUtterance.lang = 'en-US';
                         englishUtterance.rate = 0.8;
                         englishUtterance.pitch = 1.0;
                         englishUtterance.volume = 0.8;
-                        
+
                         englishUtterance.onend = function() {
                             setTimeout(() => {
                                 wordReadingPhase = 1;
@@ -2457,6 +2461,7 @@
                     case 1:
                         // 阶段2: 朗读中文释义
                         console.log('📜 阶段2: 朗读中文释义 -', wordData.chinese);
+                        showNotification(`📖 ${wordData.chinese}`, '#2196F3'); // 同步显示中文字幕
                         const chineseUtterance = new SpeechSynthesisUtterance(wordData.chinese);
                         chineseUtterance.lang = 'zh-CN';
                         chineseUtterance.rate = 1.0;
@@ -2477,6 +2482,7 @@
                         if (wordData.example && wordData.example.trim()) {
                             const englishExample = extractEnglish(wordData.example);
                             console.log('📜 阶段3: 朗读英文例句 -', englishExample);
+                            showExampleDialog(englishExample, ''); // 显示英文例句
                             
                             const englishExampleUtterance = new SpeechSynthesisUtterance(englishExample);
                             englishExampleUtterance.lang = 'en-US';
@@ -2504,6 +2510,7 @@
                             const chineseExample = extractChinese(wordData.example);
                             if (chineseExample && chineseExample.trim()) {
                                 console.log('📜 阶段4: 朗读中文例句 -', chineseExample);
+                                showExampleDialog('', chineseExample); // 显示中文例句
                                 
                                 const chineseExampleUtterance = new SpeechSynthesisUtterance(chineseExample);
                                 chineseExampleUtterance.lang = 'zh-CN';
@@ -2827,7 +2834,9 @@
                 this.chinese = chinese || ''; // 中文释义
                 this.isTarget = isTarget;
                 this.speed = this.getDifficultySpeed();
-                this.health = 1; // 所有敌机一击消灭
+                this.health = 1; // 统一设置：所有敌机都是一击消灭
+                this.maxHealth = 1; // 最大生命值
+                this.hitFlash = 0; // 击中闪烁效果计时器
                 this.movementPattern = Math.floor(Math.random() * 4); // 0-3 不同运动模式
                 this.startTime = Date.now();
                 this.amplitude = 30; // 摆动幅度
@@ -3484,8 +3493,9 @@
         
         function pauseGame() {
             if (!gameRunning) return; // 只在游戏运行时才能暂停
-            
+
             gamePaused = !gamePaused;
+            window.isPaused = gamePaused; // 暴露给测试脚本使用
             console.log(gamePaused ? '⏸️ 游戏暂停' : '▶️ 游戏继续');
             
             if (gamePaused) {
@@ -4167,7 +4177,7 @@
                 document.body.appendChild(dialog);
             });
             
-            addMobileClickSupport(document.getElementById('vocabularyBtn'), showVocabularyBook);
+            addMobileClickSupport(document.getElementById('vocabularyBtn'), showVocabulary);
             addMobileClickSupport(document.getElementById('viewWordsBtn'), showLearnedWords);
             addMobileClickSupport(document.getElementById('backBtn'), backToMenu);
             addMobileClickSupport(document.getElementById('mobilePauseBtn'), pauseGame);
