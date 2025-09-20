@@ -17,48 +17,52 @@
     left: 0;
     right: 0;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     padding: 15px;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
-    gap: 10px;
+    gap: 15px;
     z-index: 100;
+    flex-wrap: wrap;
 }
 
-.back-button {
-    position: absolute;
-    left: 0;
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    color: white;
+.vocabulary-header .back-button {
+    /* 移除绝对定位，使用flex布局 */
+    flex-shrink: 0;
+    width: auto;
+    height: 40px;
+    background: linear-gradient(135deg, #FF5722, #F44336) !important;
+    border: 2px solid #ffffff !important;
+    color: white !important;
     padding: 8px 16px;
     border-radius: 20px;
     cursor: pointer;
-    font-size: 0.9em;
+    font-size: 1rem;
+    font-weight: bold;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
 }
 
-.back-button:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateX(-2px);
+.vocabulary-header .back-button:hover {
+    background: linear-gradient(135deg, #FF7043, #FF5252) !important;
+    transform: translateX(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(244, 67, 54, 0.6);
 }
 
-.vocabulary-header h2 {
+.vocabulary-title {
     color: white;
     margin: 0;
-    text-align: center;
-    font-size: 1.2em;
-    justify-self: center;
+    font-size: 1.4em;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    flex-shrink: 0;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-    padding: 0 10px;
 }
 
 .vocabulary-header .grade-selector {
-    position: absolute;
-    right: 0;
+    /* 移除绝对定位 */
+    flex-shrink: 0;
 }
 
 .grade-selector select {
@@ -71,10 +75,10 @@
 }
 
 .vocabulary-header .search-container {
-    position: absolute;
-    left: calc(50% - 25px);
-    transform: translateX(-50%);
-    width: 97px;
+    /* 移除绝对定位，使用flex */
+    flex: 1;
+    max-width: 300px;
+    min-width: 150px;
 }
 
 .search-container input {
@@ -84,13 +88,14 @@
     border-radius: 25px;
     font-size: 1em;
     background: rgba(255, 255, 255, 0.9);
+    box-sizing: border-box;
 }
 
 .vocabulary-content {
     background: transparent;
     padding: 10px;
-    height: calc(100vh - 120px);
-    margin-top: 60px;
+    height: calc(100vh - 80px);
+    margin-top: 0;
     margin-bottom: 60px;
     overflow-y: auto;
     overflow-x: hidden;
@@ -255,25 +260,66 @@
 }
 
 /* 响应式设计 */
+@media (max-width: 768px) {
+    .vocabulary-header {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .vocabulary-title {
+        font-size: 1.2em;
+        order: 1;
+    }
+
+    .vocabulary-header .back-button {
+        order: 0;
+    }
+
+    .vocabulary-header .grade-selector {
+        order: 2;
+    }
+
+    .vocabulary-header .search-container {
+        order: 3;
+        flex: 1 1 100%;
+        max-width: 100%;
+        margin-top: 5px;
+    }
+}
+
 @media (max-width: 480px) {
     .vocabulary-header {
-        top: 20px;
+        padding: 8px;
     }
-    
+
+    .vocabulary-title {
+        font-size: 1.1em;
+    }
+
+    .vocabulary-header .back-button {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+
+    .grade-selector select {
+        padding: 6px 10px;
+        font-size: 0.85em;
+    }
+
     .word-list {
-        grid-template-columns: 1fr;
-        gap: 10px;
+        gap: 8px;
     }
-    
+
     .vocabulary-content {
-        padding: 10px;
-        margin-top: 80px;
+        padding: 8px;
     }
-    
+
     .word-item {
-        padding: 12px;
+        padding: 10px;
     }
-    
+
     .pagination {
         bottom: 10px;
         left: 10px;

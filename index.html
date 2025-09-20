@@ -875,11 +875,11 @@
             left: 0;
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, rgba(244, 67, 54, 0.9), rgba(233, 30, 99, 0.9));
-            border: 2px solid rgba(255, 255, 255, 0.8);
+            background: linear-gradient(135deg, #FF5722, #F44336);
+            border: 2px solid #ffffff;
             border-radius: 50%;
             color: #ffffff;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
             cursor: pointer;
             pointer-events: auto;
@@ -889,17 +889,28 @@
             transition: all 0.3s ease;
             z-index: 9999;
             flex-shrink: 0;
-            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4), 0 0 20px rgba(244, 67, 54, 0.2);
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(244, 67, 54, 0.5), 0 0 30px rgba(255, 87, 34, 0.3);
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 4px 20px rgba(244, 67, 54, 0.5), 0 0 30px rgba(255, 87, 34, 0.3);
+            }
+            50% {
+                box-shadow: 0 4px 25px rgba(244, 67, 54, 0.8), 0 0 40px rgba(255, 87, 34, 0.6);
+            }
         }
 
         .back-button:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
+            background: linear-gradient(135deg, #FF7043, #FF5252);
+            transform: scale(1.15);
+            animation: none;
         }
 
         .back-button:active {
-            background: rgba(255, 255, 255, 0.4);
+            background: linear-gradient(135deg, #E64A19, #D32F2F);
             transform: scale(0.95);
         }
 
@@ -1901,7 +1912,7 @@
                 <div class="game-header">
                     <div class="header-left">
                         <!-- 返回按钮 -->
-                        <button id="backBtn" class="back-button">🔙</button>
+                        <button id="backBtn" class="back-button">⬅️</button>
                         <div class="target-info">
                             <div class="target-word" id="targetWord">目标: Loading...</div>
                             <div class="target-chinese" id="targetChinese">加载中...</div>
@@ -2007,12 +2018,14 @@
         <!-- 单词本界面 (从snackwordsgame整合) -->
         <div id="vocabularyScreen" class="screen">
             <div class="vocabulary-header">
-                <button class="back-button" onclick="backToMenu()">🔙 返回</button>
+                <button class="back-button" onclick="backToMenu()">⬅️ 返回</button>
+                <h2 class="vocabulary-title">📚 单词本</h2>
                 <div class="search-container">
                     <input type="text" id="vocabSearch" placeholder="搜索单词..." oninput="searchWords()">
                 </div>
                 <div class="grade-selector">
                     <select id="vocabGradeSelect" onchange="changeVocabGrade()">
+                        <option value="">全部年级</option>
                         <option value="1">1年级</option>
                         <option value="2">2年级</option>
                         <option value="3">3年级</option>
@@ -3101,10 +3114,10 @@
         
         function getEnemySpawnRate() {
             switch(selectedDifficulty) {
-                case 'easy': return 0.008;     // 低难度：很低生成频率，给玩家充足反应时间
-                case 'medium': return 0.015;   // 中难度：适中生成频率
-                case 'hard': return 0.025;     // 高难度：较高生成频率，屏幕上敌机较多
-                default: return 0.015;
+                case 'easy': return 0.012;     // 低难度：稍微增加生成频率，保持游戏节奏
+                case 'medium': return 0.020;   // 中难度：适中生成频率
+                case 'hard': return 0.030;     // 高难度：较高生成频率，屏幕上敌机较多
+                default: return 0.020;
             }
         }
         
@@ -3130,15 +3143,21 @@
                 console.log('🎵 朗读进行中，暂不生成目标敌机');
                 targetPosition = -1;
             } else if (wordReadingComplete && !forceTargetSpawn) {
-                // 朗读完成后：正常随机生成目标敌机（60%概率，给玩家足够机会）
-                if (Math.random() < 0.6) {
+                // 朗读完成后：正常随机生成目标敌机（85%概率，让玩家有更多机会击中）
+                if (Math.random() < 0.85) {
                     targetPosition = Math.floor(Math.random() * 3);
                     console.log('✅ 朗读完成，生成目标敌机供击中');
                 }
             } else if (forceTargetSpawn) {
-                // 游戏开始时强制生成第一个目标敌机
+                // 游戏开始时强制生成第一个目标敌机（100%概率）
                 targetPosition = Math.floor(Math.random() * 3);
                 console.log('🎯 强制生成首个目标敌机');
+            } else if (!wordReadingInProgress && !wordReadingComplete) {
+                // 默认情况：75%概率生成目标敌机
+                if (Math.random() < 0.75) {
+                    targetPosition = Math.floor(Math.random() * 3);
+                    console.log('🎯 正常生成目标敌机');
+                }
             }
             
             for (let i = 0; i < 3; i++) {
