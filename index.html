@@ -318,12 +318,15 @@
         /* 菜单按钮布局 */
         .menu-buttons {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             gap: var(--spacing-md);
             align-items: center;
+            justify-content: center;
             margin-top: var(--spacing-lg);
             z-index: 2;
             position: relative;
+            width: 100%;
+            max-width: 400px;
         }
 
         .primary-button {
@@ -331,12 +334,14 @@
             color: #ffffff !important;
             border: none;
             border-radius: 25px;
-            padding: var(--spacing-lg) var(--spacing-2xl);
-            font-size: 1.1rem;
+            padding: var(--spacing-md) var(--spacing-lg);
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            min-width: 200px;
+            min-width: 140px;
             min-height: 44px;
+            flex: 1;
+            max-width: 180px;
             transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
             position: relative;
@@ -412,10 +417,7 @@
 
         /* 制作信息 */
         .creator-info {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            margin-top: 40px;
             color: rgba(255, 255, 255, 0.7);
             font-size: 0.8em;
             text-align: center;
@@ -1239,44 +1241,54 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: white;
-            padding: 16px 20px;
-            border-radius: 16px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-            color: #2d3748;
-            flex-wrap: wrap;
-            gap: 15px;
-            border: 1px solid #f1f5f9;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 8px 3px;
+            border-radius: 0;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+            color: white;
+            flex-wrap: nowrap;
+            gap: 8px;
+            position: sticky;
+            bottom: 0;
+            z-index: 100;
         }
 
         .pagination button {
-            background: #667eea;
+            background: rgba(255, 255, 255, 0.2);
             color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .pagination button:hover:not(:disabled) {
-            background: #5a67d8;
-            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
         }
 
         .pagination button:disabled {
-            background: #e2e8f0;
-            color: #a0aec0;
+            background: rgba(0, 0, 0, 0.1);
+            color: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.1);
             cursor: not-allowed;
             transform: none;
         }
 
         #pageInfo {
-            font-size: 16px;
+            font-size: 13px;
             font-weight: 600;
-            color: #2d3748;
+            color: white;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 4px 10px;
+            border-radius: 15px;
         }
 
         .total-count {
@@ -1375,44 +1387,175 @@
         /* 小屏幕优化 */
         @media (max-width: 480px) {
             #vocabularyScreen {
-                padding: 15px 5px;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                height: 100vh;
             }
-            
+
             .vocabulary-header {
                 padding: 0 5px 16px 5px;
             }
-            
+
             .word-card {
-                padding: 14px;
-                margin-bottom: 8px;
+                padding: 12px 8px;
+                margin-bottom: 5px;
+                margin-left: 3px;
+                margin-right: 3px;
             }
-            
+
             .word-title {
                 font-size: 20px;
             }
-            
+
             .word-content {
                 margin-right: 12px;
             }
-            
+
             .word-play-btn {
                 width: 40px;
                 height: 40px;
             }
-            
+
             .word-play-btn svg {
                 width: 16px;
                 height: 16px;
             }
-            
+
             .pagination {
-                padding: 10px 12px;
+                padding: 10px 5px;
             }
-            
+
             .pagination button {
-                padding: 6px 10px;
+                padding: 6px 12px;
                 font-size: 12px;
             }
+        }
+
+        /* 新单词本样式 - 超紧凑设计 */
+        .vocab-header-compact {
+            display: flex;
+            align-items: center;
+            padding: 6px 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            gap: 6px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn-compact {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn-compact:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .vocab-title-compact {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+            flex: 0 0 auto;
+        }
+
+        .grade-select-compact {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 13px;
+            cursor: pointer;
+            flex: 0 0 auto;
+        }
+
+        .search-compact {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 13px;
+            min-width: 0;
+        }
+
+        /* 单词卡片样式优化 */
+        .word-header-compact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .word-info-compact {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .word-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .pronunciation-compact {
+            font-size: 12px;
+            color: #888;
+            font-style: italic;
+        }
+
+        .chinese-compact {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .play-btn-compact {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+        }
+
+        .play-btn-compact:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.5);
+        }
+
+        .example-compact {
+            margin-top: 4px;
+            padding-top: 4px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .example-en-compact {
+            display: block;
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 2px;
+        }
+
+        .example-cn-compact {
+            display: block;
+            font-size: 11px;
+            color: #777;
         }
 
         /* 新单词本样式覆盖 - VocabularyBook风格 */
@@ -1467,30 +1610,30 @@
 
         .vocabulary-content {
             flex: 1;
-            padding: 10px 5px; /* 上下10px，左右5px的小边距 */
+            padding: 3px 2px;
             overflow-y: auto;
             overflow-x: hidden;
-            max-height: calc(100vh - 200px);
+            max-height: calc(100vh - 100px);
         }
 
         .word-list {
             display: flex;
             flex-direction: column;
-            gap: 8px; /* 适当的卡片间距 */
+            gap: 3px;
             margin: 0;
             padding: 0;
         }
 
         .word-item {
             background: white;
-            border-radius: 8px; /* 小圆角，更美观 */
-            padding: 12px 10px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 10px 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
             position: relative;
             cursor: pointer;
-            width: calc(100% - 0px); /* 占满可用宽度 */
-            margin: 0;
+            width: calc(100% - 4px);
+            margin: 0 2px;
             box-sizing: border-box;
             min-height: auto;
         }
@@ -2038,9 +2181,9 @@
                 </div>
                 <div class="pagination">
                     <div class="pagination-controls">
-                        <button id="prevPage" onclick="changePage(-1)">上一页</button>
+                        <button id="prevPage" onclick="changePage(-1)">◀ 上页</button>
                         <span id="pageInfo">1 / 1</span>
-                        <button id="nextPage" onclick="changePage(1)">下一页</button>
+                        <button id="nextPage" onclick="changePage(1)">下页 ▶</button>
                     </div>
                     <div class="vocab-stats">
                         <span id="vocabCount">总数: 0</span>
