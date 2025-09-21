@@ -3992,18 +3992,16 @@
         }
         
         function completeWordReadingFlow() {
-            //console.log('✅ 完整单词朗读流程结束 - 现在可以切换到下一个单词');
+            //console.log('✅ 完整单词朗读流程结束 - 立即切换到下一个单词');
             wordReadingInProgress = false;
-            wordReadingComplete = true;
-            forceTargetSpawn = false; // 允许正常的敌机生成
-            
-            // 🔥 修复：朗读完成后自动切换到下一个单词（缩短等待时间为3秒）
-            autoSwitchTimeout = setTimeout(() => {
-                if (gameRunning && !gamePaused) {
-                    //console.log('⏰ 朗读流程完成，自动切换到下一个单词');
-                    selectNewTargetWord();
-                }
-            }, 3000);
+            wordReadingComplete = false; // 修改：不阻止下一个单词
+            forceTargetSpawn = false;
+
+            // 🔥 修复：朗读完成后立即切换到下一个单词（无等待时间）
+            if (gameRunning && !gamePaused) {
+                //console.log('⏰ 朗读流程完成，立即切换到下一个单词');
+                selectNewTargetWord();
+            }
         }
         
         // 🔥 新增：击中目标敌机后启动完整朗读流程的函数
@@ -4583,26 +4581,18 @@
             // 决定目标敌机的生成策略
             let targetPosition = -1; // -1表示不生成目标敌机
             
-            // 🔥 修复敌机生成逻辑：根据朗读流程状态决定目标敌机生成策略
+            // 🔥 简化敌机生成逻辑：直接检查朗读状态和强制生成
             if (wordReadingInProgress) {
                 // 朗读进行中：不生成目标敌机，等待朗读完成
-                //console.log('🎵 朗读进行中，暂不生成目标敌机');
                 targetPosition = -1;
-            } else if (wordReadingComplete && !forceTargetSpawn) {
-                // 朗读完成后：提高生成概率到100%（原85%×2=170%，取100%）
-                if (Math.random() < 1.0) {
-                    targetPosition = Math.floor(Math.random() * 3);
-                    //console.log('✅ 朗读完成，生成目标敌机供击中');
-                }
             } else if (forceTargetSpawn) {
-                // 游戏开始时强制生成第一个目标敌机（100%概率）
+                // 强制生成目标敌机（新单词开始时）
                 targetPosition = Math.floor(Math.random() * 3);
-                //console.log('🎯 强制生成首个目标敌机');
-            } else if (!wordReadingInProgress && !wordReadingComplete) {
-                // 默认情况：提高到95%概率生成目标敌机（接近原来的2倍）
-                if (Math.random() < 0.95) {
+                forceTargetSpawn = false; // 使用后立即重置
+            } else {
+                // 默认情况：高概率生成目标敌机，确保游戏流畅
+                if (Math.random() < 0.85) {
                     targetPosition = Math.floor(Math.random() * 3);
-                    //console.log('🎯 正常生成目标敌机');
                 }
             }
             
@@ -5012,15 +5002,34 @@
 
         function gameOver() {
             //console.log('💀 游戏结束');
-            
+
             gameRunning = false;
             gamePaused = false;
-            
+
             if (gameLoopId) {
                 cancelAnimationFrame(gameLoopId);
                 gameLoopId = null;
             }
-            
+
+            // 🔥 修复：停止语音朗读并清除相关状态
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel();
+            }
+            wordReadingInProgress = false;
+            wordReadingPhase = 0;
+            wordReadingComplete = false;
+            forceTargetSpawn = false;
+
+            // 清除自动切换计时器
+            if (autoSwitchTimeout) {
+                clearTimeout(autoSwitchTimeout);
+                autoSwitchTimeout = null;
+            }
+
+            // 🔥 修复：清除所有朗读相关的弹窗
+            const wordDialogs = document.querySelectorAll('.word-dialog, .example-dialog, .unified-word-dialog');
+            wordDialogs.forEach(dialog => dialog.remove());
+
             // 停止所有音频
             stopAllAudio();
             
@@ -5088,6 +5097,10 @@
                 clearTimeout(autoSwitchTimeout);
                 autoSwitchTimeout = null;
             }
+
+            // 🔥 修复：清除所有朗读相关的弹窗
+            const wordDialogs = document.querySelectorAll('.word-dialog, .example-dialog, .unified-word-dialog');
+            wordDialogs.forEach(dialog => dialog.remove());
 
             // 停止所有音频（包括背景音乐）
             stopAllAudio();
@@ -5346,14 +5359,6 @@
             }
         }
         
-        function backToMenu() {
-            // 停止语音播放
-            if ('speechSynthesis' in window) {
-                speechSynthesis.cancel();
-            }
-            switchScreen('startScreen');
-            currentScreen = 'start';
-        }
         
         function showExampleDialog(englishExample, chineseExample) {
             // 🔥 修复字幕重叠问题：先清除所有现有的例句弹窗
