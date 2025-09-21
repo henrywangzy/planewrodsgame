@@ -3258,10 +3258,10 @@
         
         function getEnemySpawnRate() {
             switch(selectedDifficulty) {
-                case 'easy': return 0.012;     // 低难度：稍微增加生成频率，保持游戏节奏
-                case 'medium': return 0.020;   // 中难度：适中生成频率
-                case 'hard': return 0.030;     // 高难度：较高生成频率，屏幕上敌机较多
-                default: return 0.020;
+                case 'easy': return 0.018;     // 低难度：提高生成频率（原0.012×1.5）
+                case 'medium': return 0.030;   // 中难度：提高生成频率（原0.020×1.5）
+                case 'hard': return 0.045;     // 高难度：提高生成频率（原0.030×1.5）
+                default: return 0.030;
             }
         }
         
@@ -3287,8 +3287,8 @@
                 //console.log('🎵 朗读进行中，暂不生成目标敌机');
                 targetPosition = -1;
             } else if (wordReadingComplete && !forceTargetSpawn) {
-                // 朗读完成后：正常随机生成目标敌机（85%概率，让玩家有更多机会击中）
-                if (Math.random() < 0.85) {
+                // 朗读完成后：提高生成概率到100%（原85%×2=170%，取100%）
+                if (Math.random() < 1.0) {
                     targetPosition = Math.floor(Math.random() * 3);
                     //console.log('✅ 朗读完成，生成目标敌机供击中');
                 }
@@ -3297,8 +3297,8 @@
                 targetPosition = Math.floor(Math.random() * 3);
                 //console.log('🎯 强制生成首个目标敌机');
             } else if (!wordReadingInProgress && !wordReadingComplete) {
-                // 默认情况：75%概率生成目标敌机
-                if (Math.random() < 0.75) {
+                // 默认情况：提高到95%概率生成目标敌机（接近原来的2倍）
+                if (Math.random() < 0.95) {
                     targetPosition = Math.floor(Math.random() * 3);
                     //console.log('🎯 正常生成目标敌机');
                 }
