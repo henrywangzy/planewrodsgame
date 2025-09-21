@@ -2754,14 +2754,16 @@
         }
         
         // 停止所有音频
-        function stopAllAudio() {
+        function stopAllAudio(stopMusic = true) {
             // 停止语音合成
             if ('speechSynthesis' in window) {
                 speechSynthesis.cancel();
             }
-            
-            // 停止背景音乐
-            stopBackgroundMusic();
+
+            // 只在需要时停止背景音乐（默认停止，但暂停游戏时不停止）
+            if (stopMusic) {
+                stopBackgroundMusic();
+            }
         }
         
 
@@ -3644,17 +3646,23 @@
         
         function startGame() {
             //console.log('🚀 开始游戏');
-            
+
             currentScreen = 'game';
             gameRunning = true;
             gamePaused = false;
-            
+
             // 切换到游戏界面
             switchScreen('gameScreen');
-            
+
             // 初始化游戏
             initGame();
-            
+
+            // 开始播放背景音乐（如果音乐开关是开启的）
+            if (musicPlaying && audioEnabled) {
+                playBackgroundMusic();
+                //console.log('🎵 游戏开始，播放背景音乐');
+            }
+
             // 启动游戏循环
             lastTime = performance.now();
             gameLoopId = requestAnimationFrame(gameLoop);
@@ -3674,8 +3682,14 @@
                     gameLoopId = null;
                 }
                 
-                // 停止所有音频（包括语音朗读和背景音乐）
-                stopAllAudio();
+                // 停止语音朗读但不停止背景音乐，只是暂停它
+                stopAllAudio(false);  // false表示不停止背景音乐
+
+                // 暂停背景音乐（不停止）
+                if (backgroundMusic && !backgroundMusic.paused && musicPlaying) {
+                    backgroundMusic.pause();
+                    //console.log('🎵 暂停背景音乐');
+                }
                 
             } else {
                 // 恢复游戏循环
@@ -3683,10 +3697,11 @@
                 gameLoopId = requestAnimationFrame(gameLoop);
                 
                 // 恢复背景音乐
-                if (backgroundMusic && backgroundMusic.paused && audioEnabled) {
+                if (backgroundMusic && backgroundMusic.paused && musicPlaying && audioEnabled) {
                     backgroundMusic.play().catch(e => {
                         //console.log('背景音乐播放失败:', e);
                     });
+                    //console.log('🎵 恢复背景音乐');
                 }
             }
         }
