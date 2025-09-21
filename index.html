@@ -1398,10 +1398,17 @@
                 flex-direction: column;
                 height: 100vh;
                 overflow: hidden;
+                justify-content: flex-start !important;
+            }
+
+            .vocab-header {
+                padding: 2px 15px 15px 15px;
+                margin-top: 0;
             }
 
             .vocabulary-header {
                 padding: 0 5px 16px 5px;
+                margin-top: 0;
             }
 
             .word-card {
@@ -1575,6 +1582,8 @@
             flex-direction: column;
             height: 100%;
             position: relative;
+            justify-content: flex-start !important;
+            align-items: stretch;
         }
 
         #vocabularyScreen:not(.active) {
@@ -1585,8 +1594,9 @@
 
         .vocab-header {
             background: linear-gradient(135deg, #4CAF50, #8BC34A);
-            padding: 15px;
+            padding: 5px 15px 15px 15px;
             color: white;
+            margin-top: 0;
         }
 
         .vocab-header-top {
