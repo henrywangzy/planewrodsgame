@@ -3021,8 +3021,8 @@
                         break;
                     case 3: // 螺旋形移动
                         this.x = this.startX + Math.cos(elapsedTime * this.frequency * 2) * (this.amplitude * 0.7);
-                        // 螺旋移动使用基础速度的80%
-                        this.speed = this.getDifficultySpeed() * 0.8;
+                        // 螺旋移动使用基础速度的90%（因为基础速度已经降低了）
+                        this.speed = this.getDifficultySpeed() * 0.9;
                         break;
                 }
                 
@@ -3094,10 +3094,10 @@
             
             getDifficultySpeed() {
                 switch(selectedDifficulty) {
-                    case 'easy': return 0.3;      // 低难度：非常慢速，适合初学者
-                    case 'medium': return 0.5;    // 中难度：适中速度，有一定挑战
-                    case 'hard': return 0.7;      // 高难度：较快速度，需要反应灵敏
-                    default: return 0.5;
+                    case 'easy': return 0.15;     // 低难度：更慢速，降低50%（原0.3）
+                    case 'medium': return 0.25;   // 中难度：适中速度，降低50%（原0.5）
+                    case 'hard': return 0.40;     // 高难度：较快速度，降低约43%（原0.7）
+                    default: return 0.25;
                 }
             }
             
