@@ -5151,7 +5151,6 @@
             let html = '';
             wordsToShow.forEach((wordObj, index) => {
                 const isLearned = learnedWords.some(learned => learned.word === wordObj.word);
-                const phonetic = getPhonetic(wordObj.word);
                 const chinese = wordObj.chinese || '';
                 const sentence = wordObj.sentence || wordObj.meaning || '';
                 const chineseSentence = wordObj.chineseSentence || '';
@@ -5176,7 +5175,7 @@
                     <div class="word-item">
                         <div class="word-info">
                             <div class="word-main">
-                                ${wordObj.word} /${phonetic}/ ${chinese}
+                                ${wordObj.word} ${chinese}
                                 <span class="status-badge">
                                     ${isLearned ? '🏆' : ''}
                                 </span>
@@ -5199,25 +5198,7 @@
             updateVocabStats();
         }
         
-        function getPhonetic(word) {
-            // 简单的音标映射，实际项目中应该有完整的音标数据库
-            const phonetics = {
-                'cat': 'kæt',
-                'dog': 'dɔːɡ',
-                'bird': 'bɜːrd',
-                'fish': 'fɪʃ',
-                'duck': 'dʌk',
-                'hello': 'həˈloʊ',
-                'bye': 'baɪ',
-                'yes': 'jes',
-                'no': 'noʊ',
-                'red': 'red',
-                'blue': 'bluː',
-                'green': 'ɡriːn',
-                'yellow': 'ˈjeloʊ'
-            };
-            return phonetics[word.toLowerCase()] || word.toLowerCase();
-        }
+        // getPhonetic函数已删除 - 不再显示音标
         
         function updatePagination() {
             const totalPages = Math.ceil(filteredWords.length / wordsPerPage);
