@@ -1115,7 +1115,7 @@
         .word-list {
             display: block;
             margin: 0;
-            padding: 0 5px;
+            padding: 0 1px;  /* 修改为1px左右边距 */
             flex: 1;
             overflow-y: auto;
             max-height: calc(100vh - 200px);
@@ -1298,7 +1298,7 @@
         /* 移动端适配 */
         @media (max-width: 768px) {
             #vocabularyScreen {
-                padding: 16px 12px;
+                padding: 0;  /* 移除内边距 */
             }
 
             .vocabulary-header {
@@ -1398,9 +1398,9 @@
 
             .word-card {
                 padding: 12px 8px;
-                margin-bottom: 5px;
-                margin-left: 3px;
-                margin-right: 3px;
+                margin-bottom: 2px;
+                margin-left: 0;  /* 移除左边距 */
+                margin-right: 0;  /* 移除右边距 */
             }
 
             .word-title {
@@ -1435,7 +1435,7 @@
         .vocab-header-compact {
             display: flex;
             align-items: center;
-            padding: 6px 3px;
+            padding: 6px 1px;  /* 修改为1px左右边距 */
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             gap: 6px;
@@ -1618,9 +1618,9 @@
         .word-list {
             display: flex;
             flex-direction: column;
-            gap: 3px;
+            gap: 2px;
             margin: 0;
-            padding: 0;
+            padding: 0 1px;  /* 设置1px左右边距 */
         }
 
         .word-item {
@@ -1631,8 +1631,8 @@
             transition: all 0.3s ease;
             position: relative;
             cursor: pointer;
-            width: calc(100% - 4px);
-            margin: 0 2px;
+            width: 100%;  /* 使用100%宽度 */
+            margin: 0;  /* 移除左右margin */
             box-sizing: border-box;
             min-height: auto;
         }
