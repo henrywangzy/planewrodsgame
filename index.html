@@ -3242,9 +3242,11 @@
             wordReadingComplete = false;
             forceTargetSpawn = true; // 强制生成目标敌机直到玩家击中并完成朗读
             
-            // 更新UI显示
-            document.getElementById('targetWord').textContent = `目标: ${targetWord}`;
-            document.getElementById('targetChinese').textContent = currentWordData.chinese;
+            // 更新UI显示（添加空值检查）
+            const targetWordEl = document.getElementById('targetWord');
+            const targetChineseEl = document.getElementById('targetChinese');
+            if (targetWordEl) targetWordEl.textContent = `目标: ${targetWord}`;
+            if (targetChineseEl) targetChineseEl.textContent = currentWordData.chinese;
             
             //console.log('🎯 新目标单词:', targetWord, currentWordData.chinese);
             //console.log('📢 开始完整朗读流程，目标敌机将反复出现');
@@ -3579,11 +3581,15 @@
         }
         
         function updateUI() {
-            document.getElementById('scoreDisplay').textContent = score;
-            document.getElementById('livesDisplay').textContent = `${health}/${maxHealth}`;
-            
+            const scoreEl = document.getElementById('scoreDisplay');
+            if (scoreEl) scoreEl.textContent = score;
+
+            const livesEl = document.getElementById('livesDisplay');
+            if (livesEl) livesEl.textContent = `${health}/${maxHealth}`;
+
             const weaponNames = ['', '基础', '双发', '三发'];
-            document.getElementById('weaponDisplay').textContent = weaponNames[weaponLevel] || '基础';
+            const weaponEl = document.getElementById('weaponDisplay');
+            if (weaponEl) weaponEl.textContent = weaponNames[weaponLevel] || '基础';
         }
         
         function initHealthBar() {
@@ -3724,12 +3730,18 @@
             const totalShots = enemiesHitCount + (bullets.length > 0 ? 1 : 0); // 简单估算
             const accuracy = enemiesHitCount > 0 ? Math.round((correctWordsCount / enemiesHitCount) * 100) : 0;
             
-            // 更新结束界面数据
-            document.getElementById('finalScore').textContent = score;
-            document.getElementById('enemiesHit').textContent = enemiesHitCount;
-            document.getElementById('wordsLearned').textContent = correctWordsCount;
-            document.getElementById('maxCombo').textContent = maxCombo;
-            document.getElementById('accuracy').textContent = `${accuracy}%`;
+            // 更新结束界面数据（添加空值检查）
+            const finalScoreEl = document.getElementById('finalScore');
+            const enemiesHitEl = document.getElementById('enemiesHit');
+            const wordsLearnedEl = document.getElementById('wordsLearned');
+            const maxComboEl = document.getElementById('maxCombo');
+            const accuracyEl = document.getElementById('accuracy');
+
+            if (finalScoreEl) finalScoreEl.textContent = score;
+            if (enemiesHitEl) enemiesHitEl.textContent = enemiesHitCount;
+            if (wordsLearnedEl) wordsLearnedEl.textContent = correctWordsCount;
+            if (maxComboEl) maxComboEl.textContent = maxCombo;
+            if (accuracyEl) accuracyEl.textContent = `${accuracy}%`;
             
             // 更新结果标题和副标题
             const resultTitle = document.getElementById('resultTitle');
@@ -4215,18 +4227,24 @@
                 backgroundMusic.loop = true;
                 backgroundMusic.volume = 0.126;
                 backgroundMusic.preload = 'auto';
-                
+
                 backgroundMusic.addEventListener('canplay', () => {
                     //console.log('🔊 背景音乐文件加载成功');
                 });
-                
+
+                backgroundMusic.addEventListener('error', (e) => {
+                    //console.warn('⚠️ 背景音乐加载失败:', e);
+                    // 如果音频文件加载失败，使用合成音频作为备份
+                    initSynthAudio();
+                });
+
                 backgroundMusic.addEventListener('loadstart', () => {
                     //console.log('🔊 开始加载背景音乐文件');
                 });
-                
+
                 backgroundMusic.addEventListener('ended', () => {
                     //console.log('🎵 背景音乐播放结束，重新开始');
-                    if (!gamePaused) {
+                    if (!gamePaused && musicPlaying) {
                         backgroundMusic.play().catch(e => {
                             //console.log('重新播放失败:', e);
                         });
