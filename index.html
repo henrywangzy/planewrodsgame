@@ -3753,18 +3753,35 @@
         
         function backToMenu() {
             //console.log('🏠 返回主菜单');
-            
+
             gameRunning = false;
             gamePaused = false;
-            
+
             if (gameLoopId) {
                 cancelAnimationFrame(gameLoopId);
                 gameLoopId = null;
             }
-            
-            // 停止所有音频
+
+            // 立即停止所有语音朗读
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel();
+                //console.log('🔇 停止语音朗读');
+            }
+
+            // 清除朗读相关的状态
+            wordReadingInProgress = false;
+            wordReadingPhase = 0;
+            wordReadingComplete = false;
+
+            // 清除自动切换计时器
+            if (autoSwitchTimeout) {
+                clearTimeout(autoSwitchTimeout);
+                autoSwitchTimeout = null;
+            }
+
+            // 停止所有音频（包括背景音乐）
             stopAllAudio();
-            
+
             // 切换到开始界面
             switchScreen('startScreen');
             currentScreen = 'start';
