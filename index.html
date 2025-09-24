@@ -424,6 +424,134 @@
             z-index: 2;
         }
 
+        /* 游戏说明按钮 */
+        .game-rules-btn {
+            margin-top: 10px;
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .game-rules-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .game-rules-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* 游戏规则弹窗 */
+        .rules-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .rules-modal.active {
+            display: flex;
+        }
+
+        .rules-content {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 350px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            color: white;
+        }
+
+        /* 隐藏滚动条但保持可滚动 */
+        .rules-content::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        .rules-content h2 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: var(--accent-yellow);
+            font-size: 1.3em;
+        }
+
+        .rules-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 28px;
+            height: 28px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .rules-close:hover {
+            background: rgba(255,255,255,0.3);
+            transform: rotate(90deg);
+        }
+
+        .rules-section {
+            margin-bottom: 12px;
+        }
+
+        .rules-section h3 {
+            color: var(--laser-green);
+            margin-bottom: 6px;
+            font-size: 0.95em;
+        }
+
+        .rules-section p {
+            line-height: 1.4;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.8em;
+            margin-bottom: 4px;
+        }
+
+        .rules-section ul {
+            list-style: none;
+            padding-left: 8px;
+        }
+
+        .rules-section li {
+            margin-bottom: 3px;
+            color: rgba(255,255,255,0.85);
+            font-size: 0.75em;
+            position: relative;
+            padding-left: 15px;
+            line-height: 1.3;
+        }
+
+        .rules-section li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--accent-yellow);
+            font-size: 0.9em;
+        }
+
         /* 动画类 */
         .animate-slideInUp {
             animation: slideInUp 0.8s ease-out;
@@ -2232,6 +2360,73 @@
             <!-- 制作信息 -->
             <div class="creator-info animate-fadeIn">
                 制作by公众号：泡泡妈学AI
+            </div>
+
+            <!-- 游戏说明按钮 -->
+            <button class="game-rules-btn animate-fadeIn" onclick="showGameRules()">
+                📖 游戏说明
+            </button>
+        </div>
+
+        <!-- 游戏规则弹窗 -->
+        <div id="rulesModal" class="rules-modal">
+            <div class="rules-content">
+                <div class="rules-close" onclick="hideGameRules()">×</div>
+                <h2>🎮 游戏规则</h2>
+
+                <div class="rules-section">
+                    <h3>📌 基本玩法</h3>
+                    <ul>
+                        <li>控制飞机左右移动并发射子弹</li>
+                        <li>屏幕顶部显示目标单词</li>
+                        <li>射击携带目标单词的敌机得分</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section">
+                    <h3>🎯 操作方法</h3>
+                    <ul>
+                        <li>移动：方向键/触屏滑动</li>
+                        <li>射击：空格/点击屏幕</li>
+                        <li>暂停：ESC键或暂停按钮</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section">
+                    <h3>🌟 得分机制</h3>
+                    <ul>
+                        <li>击中正确：+10分，播放发音</li>
+                        <li>击中错误：-5分，减生命值</li>
+                        <li>连击奖励：连续击中额外加分</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section">
+                    <h3>⚡ 武器升级</h3>
+                    <ul>
+                        <li>每击中5个正确目标升级武器</li>
+                        <li>双发武器：同时发射两枚子弹</li>
+                        <li>三发散弹：扇形发射三枚子弹</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section">
+                    <h3>📚 学习强化</h3>
+                    <ul>
+                        <li>击中正确单词自动播放发音</li>
+                        <li>错误单词会增加出现频率</li>
+                        <li>游戏结束可查看学习统计</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section">
+                    <h3>🎓 难度选择</h3>
+                    <ul>
+                        <li>1-6年级不同难度等级</li>
+                        <li>共1030+个小学英语单词</li>
+                        <li>高年级速度更快挑战更大</li>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -5673,11 +5868,30 @@
             }
         }
         
+        // 显示游戏规则弹窗
+        function showGameRules() {
+            const modal = document.getElementById('rulesModal');
+            modal.classList.add('active');
+        }
+
+        // 隐藏游戏规则弹窗
+        function hideGameRules() {
+            const modal = document.getElementById('rulesModal');
+            modal.classList.remove('active');
+        }
+
+        // 点击弹窗外部关闭
+        document.getElementById('rulesModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideGameRules();
+            }
+        });
+
         function toggleBackgroundMusic() {
             musicPlaying = !musicPlaying;
             const musicBtn = document.getElementById('musicToggleBtn');
             const musicIcon = document.getElementById('musicIcon');
-            
+
             if (musicPlaying) {
                 // 开启背景音乐
                 if (backgroundMusic) {
